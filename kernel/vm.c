@@ -5,6 +5,8 @@
 #include "riscv.h"
 #include "defs.h"
 #include "fs.h"
+#include "spinlock.h" 
+#include "proc.h"  // create after spinlock.h
 
 /*
  * the kernel's page table.
@@ -436,4 +438,13 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   } else {
     return -1;
   }
+}
+
+static int deep = 0;
+
+void vmprint(void)
+{
+    struct proc *p = myproc();
+    if(!deep)
+        printf("page table: %p\n", p->pagetable);
 }
